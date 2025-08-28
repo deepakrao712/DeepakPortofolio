@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Deepak Rao — Professional Portfolio</title>
+  <meta name="description" content="Deepak Rao — MERN developer & data analyst. Portfolio, projects, and contact." />
+  <meta name="theme-color" content="#0ea5e9" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root{
+      --bg: #0b1220;
+      --panel: #0f172a;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --brand: #0ea5e9;
+      --brand-2: #22d3ee;
+      --accent: #a78bfa;
+      --ok: #34d399;
+      --danger: #fb7185;
+      --ring: rgba(14,165,233,.35);
+      --radius: 16px;
+      --shadow: 0 10px 30px rgba(0,0,0,.4);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%;font-family:Inter,sans-serif;background:linear-gradient(180deg,var(--bg),#0b1020 40%,#0b0f1a);color:var(--text)}
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1150px;margin:auto;padding:0 20px}
+    .btn{display:inline-flex;align-items:center;gap:.6rem;background:linear-gradient(90deg,var(--brand),var(--brand-2));
+      padding:.85rem 1.15rem;border-radius:999px;border:0;cursor:pointer;color:#041016;font-weight:700;box-shadow:var(--shadow);transition:.25s ease}
+    .btn.ghost{background:transparent;color:var(--text);border:1px solid rgba(148,163,184,.35)}
+    .btn:hover{filter:brightness(1.07);transform:translateY(-1px)}
+
+    header{position:sticky;top:0;z-index:50;background:rgba(11,17,32,.7);backdrop-filter:blur(10px);border-bottom:1px solid rgba(148,163,184,.15)}
+    .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+    .brand{display:flex;align-items:center;gap:.6rem;font-weight:800}
+    .brand .logo{width:34px;height:34px;border-radius:10px;background:radial-gradient(circle at 30% 30%, var(--brand), var(--accent));box-shadow:0 6px 16px rgba(34,211,238,.35)}
+    nav ul{display:flex;gap:1.25rem;list-style:none;margin:0;padding:0}
+    nav a{color:var(--muted)}
+    nav a.active,nav a:hover{color:var(--text)}
+    .menu-btn{display:none}
+
+    .hero{position:relative;padding:80px 0}
+    .hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center}
+    .headline{font-size:clamp(28px,5vw,54px);line-height:1.05;margin:0 0 10px}
+    .sub{color:var(--muted);font-size:1.05rem;margin:0 0 26px}
+    .badges{display:flex;gap:.6rem;flex-wrap:wrap;margin:18px 0}
+    .badge{border:1px solid rgba(148,163,184,.25);padding:.4rem .7rem;border-radius:999px;color:var(--muted);font-size:.85rem}
+    .card{background:linear-gradient(180deg,var(--panel),#0b1220);border:1px solid rgba(148,163,184,.15);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+    .profile-photo {width: 260px;height: 260px;border-radius: 50%;object-fit: cover;border: 4px solid var(--brand);box-shadow:0 8px 20px rgba(0,0,0,.5);}
+
+    section{padding:70px 0}
+    .section-title{font-size:1.6rem;margin:0 0 24px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+
+    .tile{position:relative;overflow:hidden}
+    .tile .h{font-weight:700}
+    .tile:hover{transform:translateY(-3px)}
+    .tile,.project{transition:.25s ease; background:#0d1831;border:1px solid rgba(148,163,184,.14);border-radius:14px;padding:18px}
+    .project .meta{display:flex;gap:.6rem;flex-wrap:wrap;color:var(--muted);font-size:.85rem}
+
+    /* Resume Viewer Styles */
+    .resume-actions{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:20px}
+    .resume-viewer{
+      display:none;
+      margin-top:20px;
+      border-radius:12px;
+      overflow:hidden;
+      border:1px solid rgba(148,163,184,.25);
+      background:var(--panel);
+      animation:slideDown 0.3s ease-out;
+    }
+    .resume-viewer.show{display:block}
+    
+    .resume-iframe{
+      width:100%;
+      height:800px;
+      border:none;
+      border-radius:12px;
+    }
+    
+    .resume-fallback{
+      padding:40px 20px;
+      text-align:center;
+      color:var(--muted);
+    }
+    
+    .resume-html{
+      max-height:600px;
+      overflow-y:auto;
+      padding:30px;
+      background:white;
+      color:#333;
+      border-radius:12px;
+      font-family: 'Arial', sans-serif;
+    }
+    
+    .resume-html h1{color:#2563eb;font-size:2rem;margin-bottom:10px}
+    .resume-html h2{color:#1e40af;border-bottom:2px solid #e5e7eb;padding-bottom:5px;margin-top:25px}
+    .resume-html h3{color:#374151;margin-top:20px}
+    .resume-html .contact-info{background:#f8fafc;padding:15px;border-radius:8px;margin:15px 0}
+    .resume-html .skills{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+    .resume-html .skill-tag{background:#dbeafe;color:#1e40af;padding:4px 8px;border-radius:4px;font-size:0.85rem}
+    .resume-html ul{margin:10px 0;padding-left:20px}
+    .resume-html li{margin:5px 0}
+
+    @keyframes slideDown{
+      from{opacity:0;transform:translateY(-10px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+
+    form{display:grid;gap:12px}
+    input,textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(148,163,184,.25);background:#0b152b;color:var(--text)}
+    input:focus,textarea:focus{outline:2px solid var(--ring);border-color:transparent}
+
+    footer{padding:40px 0;border-top:1px solid rgba(148,163,184,.15);color:var(--muted)}
+
+    .socials{display:flex;gap:1rem;font-size:1.5rem;margin-top:20px}
+    .socials a{color:var(--text);transition:color .2s}
+    .socials a:hover{color:var(--brand)}
+
+    @media (max-width: 950px){
+      .hero-grid{grid-template-columns:1fr}
+      .grid-3{grid-template-columns:1fr 1fr}
+      .resume-iframe{height:600px}
+    }
+    @media (max-width: 640px){
+      .grid-3,.grid-2{grid-template-columns:1fr}
+      nav ul{display:none}
+      .menu-btn{display:inline-flex;align-items:center;gap:.4rem;border:1px solid rgba(148,163,184,.25);background:transparent;color:var(--text);border-radius:10px;padding:.45rem .7rem}
+      .resume-actions{flex-direction:column}
+      .resume-iframe{height:500px}
+      .resume-html{padding:20px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand"><div class="logo" aria-hidden="true"></div> Deepak Rao</div>
+      <nav>
+        <ul>
+          <li><a href="#home" class="active">Home</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#resume">Resume</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰ Menu</button>
+    </div>
+  </header>
+
+  <main id="home" class="hero">
+    <div class="container hero-grid">
+      <section>
+        <h1 class="headline">MERN Developer & Data Analyst crafting fast, reliable web apps.</h1>
+        <p class="sub">I build responsive, accessible experiences with React, Node, and data-driven insights. Currently open for internships and freelance projects.</p>
+        <div style="display:flex;gap:.8rem;flex-wrap:wrap">
+          <a class="btn" href="#contact">Start a Project</a>
+          <a class="btn ghost" href="#projects">View Work</a>
+        </div>
+        <div class="socials">
+          <a href="mailto:rs8985061@gmail.com" title="Email"><i class="fa-solid fa-envelope"></i></a>
+          <a href="https://github.com/deepakrao712" target="_blank" title="GitHub"><i class="fa-brands fa-github"></i></a>
+          <a href="https://www.linkedin.com/in/deepakrao712" target="_blank" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+          <a href="tel:+919004312645" title="Phone"><i class="fa-solid fa-phone"></i></a>
+        </div>
+      </section>
+      <aside style="text-align: right;">
+        <img src="deepak346.jpeg" alt="Deepak Rao" class="profile-photo">
+      </aside>
+    </div>
+  </main>
+
+  <section id="resume">
+    <div class="container">
+      <h2 class="section-title">Resume</h2>
+      <div class="card">
+        <p>View my detailed resume below or download the PDF version:</p>
+        
+        <div class="resume-actions">
+          <button class="btn" onclick="toggleResumeView('pdf')">
+            <i class="fa-solid fa-file-pdf"></i> <span id="pdfToggle">View PDF</span>
+          </button>
+          <button class="btn ghost" onclick="toggleResumeView('html')">
+            <i class="fa-solid fa-eye"></i> <span id="htmlToggle">View Details</span>
+          </button>
+          <a class="btn ghost" href="DeepakRaoResume.pdf" target="_blank">
+            <i class="fa-solid fa-download"></i> Download PDF
+          </a>
+        </div>
+        
+        <!-- PDF Viewer -->
+        <div id="pdfViewer" class="resume-viewer">
+          <iframe src="DeepakRaoResume.pdf" class="resume-iframe" title="Deepak Rao Resume PDF">
+            <div class="resume-fallback">
+              <p>PDF viewer not supported in your browser.</p>
+              <a class="btn" href="DeepakRaoResume.pdf" target="_blank">
+                <i class="fa-solid fa-external-link-alt"></i> Open in New Tab
+              </a>
+            </div>
+          </iframe>
+        </div>
+
+        <!-- HTML Resume -->
+        <div id="htmlViewer" class="resume-viewer">
+          <div class="resume-html">
+            <h1>Deepak Rao</h1>
+            <div class="contact-info">
+              <p><strong>Email:</strong> rs8985061@gmail.com | <strong>Phone:</strong> +91 9004312645</p>
+              <p><strong>LinkedIn:</strong> linkedin.com/in/deepakrao712 | <strong>GitHub:</strong> github.com/deepakrao712</p>
+              <p><strong>Location:</strong> Mumbai, Maharashtra</p>
+            </div>
+
+            <h2>Professional Summary</h2>
+            <p>Computer Science student with 9.58 CGPA and proven experience as MERN Stack Developer. Specialized in building responsive web applications, data analysis, and full-stack development. Currently seeking internship opportunities and freelance projects.</p>
+
+            <h2>Education</h2>
+            <h3>Bachelor of Science in Computer Science</h3>
+            <p><strong>RJ College, Mumbai University</strong> | 2022 - 2025</p>
+            <p><strong>CGPA:</strong> 9.58/10</p>
+
+            <h2>Technical Skills</h2>
+            <div class="skills">
+              <span class="skill-tag">JavaScript</span>
+              <span class="skill-tag">React.js</span>
+              <span class="skill-tag">Node.js</span>
+              <span class="skill-tag">MongoDB</span>
+              <span class="skill-tag">Python</span>
+              <span class="skill-tag">Java</span>
+              <span class="skill-tag">C/C++</span>
+              <span class="skill-tag">SQL</span>
+              <span class="skill-tag">HTML/CSS</span>
+              <span class="skill-tag">PostgreSQL</span>
+              <span class="skill-tag">Django</span>
+              <span class="skill-tag">Flask</span>
+              <span class="skill-tag">Git</span>
+              <span class="skill-tag">VS Code</span>
+            </div>
+
+            <h2>Professional Experience</h2>
+            <h3>MERN Stack Developer Intern</h3>
+            <p><strong>Company</strong> | Duration</p>
+            <ul>
+              <li>Developed responsive web applications using React.js and Node.js</li>
+              <li>Implemented RESTful APIs and integrated with MongoDB databases</li>
+              <li>Collaborated with cross-functional teams to deliver high-quality solutions</li>
+              <li>Optimized application performance and user experience</li>
+            </ul>
+
+            <h3>React Developer Intern</h3>
+            <p><strong>Company</strong> | Duration</p>
+            <ul>
+              <li>Built interactive user interfaces using React.js and modern JavaScript</li>
+              <li>Implemented state management and component lifecycle optimization</li>
+              <li>Created responsive designs with CSS3 and modern frameworks</li>
+              <li>Participated in code reviews and agile development processes</li>
+            </ul>
+
+            <h2>Key Projects</h2>
+            <h3>Disease Predictor</h3>
+            <ul>
+              <li>Health-risk prediction application using React Vite and Django</li>
+              <li>PostgreSQL database integration for user data management</li>
+              <li>Intuitive forms and personalized health reports generation</li>
+              <li>Technologies: React, Django, PostgreSQL, Python</li>
+            </ul>
+
+            <h3>Clinic Near You</h3>
+            <ul>
+              <li>Location-based clinic finder with interactive map integration</li>
+              <li>Real-time search functionality and appointment booking system</li>
+              <li>Responsive design optimized for mobile and desktop</li>
+              <li>Technologies: HTML5, CSS3, JavaScript, Geolocation API</li>
+            </ul>
+
+            <h3>Weather Application</h3>
+            <ul>
+              <li>Real-time weather data application using third-party APIs</li>
+              <li>Clean, mobile-first design with intuitive user interface</li>
+              <li>Dynamic weather visualization and location-based forecasts</li>
+              <li>Technologies: HTML5, CSS3, JavaScript, Weather API</li>
+            </ul>
+
+            <h2>Certifications & Achievements</h2>
+            <ul>
+              <li>Academic Excellence - 9.58 CGPA in Computer Science</li>
+              <li>Completed internships in React and MERN stack development</li>
+              <li>Experience in full-stack web application development</li>
+              <li>Proficient in data analysis and visualization</li>
+            </ul>
+
+            <h2>Availability</h2>
+            <p><strong>Current Status:</strong> Open for internships and freelance projects</p>
+            <p><strong>Working Hours:</strong> 10-20 hours per week, evenings 4-6 PM IST</p>
+            <p><strong>Preferred Roles:</strong> Full-stack Developer, Data Analyst, MERN Developer</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="container">
+      <h2 class="section-title">Services</h2>
+      <div class="grid-3">
+        <div class="tile">
+          <div class="h">Full‑Stack Web Apps</div>
+          <p class="muted">Design to deploy: React, Node, MongoDB/Postgres, clean REST APIs.</p>
+        </div>
+        <div class="tile">
+          <div class="h">Data Dashboards</div>
+          <p class="muted">ETL, charts, insights with Python, pandas, and interactive UIs.</p>
+        </div>
+        <div class="tile">
+          <div class="h">Mobile Interfaces</div>
+          <p class="muted">React Native prototypes with smooth UX and offline‑first patterns.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="container">
+      <h2 class="section-title">Featured Projects</h2>
+      <div class="grid-3">
+        <article class="project">
+          <h3>Disease Predictor</h3>
+          <p>Health‑risk prediction with React Vite, Django, PostgreSQL. Intuitive forms and personalized reports.</p>
+          <div class="meta"><span>React</span><span>Django</span><span>Postgres</span></div>
+        </article>
+        <article class="project">
+          <h3>Clinic Near You</h3>
+          <p>Location‑based clinic finder with map search, booking, and responsive UI.</p>
+          <div class="meta"><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
+        </article>
+        <article class="project">
+          <h3>Weather App</h3>
+          <p>Real‑time weather by city using third‑party API with clean, mobile‑first design.</p>
+          <div class="meta"><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="container grid-2">
+      <div>
+        <h2 class="section-title">About</h2>
+        <p class="muted">I'm Deepak Rao, a Computer Science student at RJ College (Mumbai University) with a CGPA of 9.58. I love building crisp, accessible interfaces and reliable backends. I've completed internships as a React developer and MERN developer, and I enjoy turning ideas into performant, production‑ready products.</p>
+        <ul style="color:var(--muted)">
+          <li><b>Languages:</b> Java, Python, C/C++, JavaScript, SQL, HTML/CSS, R</li>
+          <li><b>Frameworks:</b> React, Node, Flask</li>
+          <li><b>Tools:</b> Git, VS Code, Eclipse, Postgres</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">What I'm Looking For</h3>
+        <p class="muted">Internships and freelance roles in full‑stack development and data projects. I'm available 10–20 hrs/week and evenings 4–6 PM IST.</p>
+        <a class="btn" href="#contact">Hire Me</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container">
+      <h2 class="section-title">Contact</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3 style="margin-top:0">Let's build something</h3>
+          <form id="contactForm" action="https://formspree.io/f/xqadajnl" method="POST">
+            <input type="text" name="name" placeholder="Your name" required />
+            <input type="email" name="email" placeholder="Your email" required />
+            <input type="hidden" name="_subject" value="New Portfolio Contact - Deepak Rao" />
+            <textarea name="message" rows="5" placeholder="Tell me about your project" required></textarea>
+            <button class="btn" type="submit">Send Message</button>
+            <p id="formMsg" class="muted" role="status" style="margin:8px 0 0"></p>
+          </form>
+        </div>
+        <div class="card">
+          <h3 style="margin-top:0">Quick Links</h3>
+          <p>📞 9004312645</p>
+          <p>✉️ <a href="mailto:rs8985061@gmail.com">rs8985061@gmail.com</a></p>
+          <p>🔗 <a href="https://www.linkedin.com/in/deepak-rao-46b477314" target="_blank" rel="noreferrer">LinkedIn</a></p>
+          <p>💻 <a href="https://github.com/deepakrao712" target="_blank" rel="noreferrer">GitHub</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container" style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap">
+      <div>© <span id="year"></span> Deepak Rao. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('menuBtn');
+    const nav = document.querySelector('nav ul');
+    if(menuBtn){
+      menuBtn.addEventListener('click',()=>{
+        if(getComputedStyle(nav).display==='none'){ 
+          nav.style.display='flex'; 
+          nav.style.flexDirection='column'; 
+          nav.style.gap='1rem'; 
+        } else { 
+          nav.style.display='none'; 
+        }
+      });
+    }
+
+    // Smooth scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click',e=>{ 
+        const id=a.getAttribute('href'); 
+        if(id.length>1){ 
+          e.preventDefault(); 
+          document.querySelector(id).scrollIntoView({behavior:'smooth'});
+        } 
+      });
+    });
+
+    // Resume viewer functionality
+    let currentViewer = null;
+
+    function toggleResumeView(type) {
+      const pdfViewer = document.getElementById('pdfViewer');
+      const htmlViewer = document.getElementById('htmlViewer');
+      const pdfToggle = document.getElementById('pdfToggle');
+      const htmlToggle = document.getElementById('htmlToggle');
+
+      // Hide all viewers first
+      pdfViewer.classList.remove('show');
+      htmlViewer.classList.remove('show');
+
+      // If clicking the same viewer that's already open, close it
+      if (currentViewer === type) {
+        currentViewer = null;
+        pdfToggle.innerHTML = '<i class="fa-solid fa-file-pdf"></i> View PDF';
+        htmlToggle.innerHTML = '<i class="fa-solid fa-eye"></i> View Details';
+        return;
+      }
+
+      // Show the selected viewer
+      if (type === 'pdf') {
+        pdfViewer.classList.add('show');
+        pdfToggle.innerHTML = '<i class="fa-solid fa-eye-slash"></i> Hide PDF';
+        htmlToggle.innerHTML = '<i class="fa-solid fa-eye"></i> View Details';
+        currentViewer = 'pdf';
+      } else if (type === 'html') {
+        htmlViewer.classList.add('show');
+        htmlToggle.innerHTML = '<i class="fa-solid fa-eye-slash"></i> Hide Details';
+        pdfToggle.innerHTML = '<i class="fa-solid fa-file-pdf"></i> View PDF';
+        currentViewer = 'html';
+      }
+
+      // Smooth scroll to resume section after a short delay
+      setTimeout(() => {
+        document.getElementById('resume').scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }, 100);
+    }
+
+    // Contact form handling
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      const formMsg = document.getElementById('formMsg');
+      formMsg.textContent = 'Sending message...';
+      formMsg.style.color = 'var(--brand)';
+      
+      // Formspree will handle the actual submission
+      // Show success message after form submission
+      setTimeout(() => {
+        formMsg.textContent = 'Message sent successfully! I\'ll get back to you soon.';
+        formMsg.style.color = 'var(--ok)';
+      }, 1000);
+      
+      // Clear message after 5 seconds
+      setTimeout(() => {
+        formMsg.textContent = '';
+      }, 6000);
+    });
+
+    // Set current year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Active nav link highlighting
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('section, main');
+      const navLinks = document.querySelectorAll('nav a');
+      
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (scrollY >= (sectionTop - 200)) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
